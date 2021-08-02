@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/baconYao/bookings-app/pkg/config"
-	"github.com/baconYao/bookings-app/pkg/handlers"
+	"github.com/baconYao/bookings-app/internal/config"
+	"github.com/baconYao/bookings-app/internal/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 )

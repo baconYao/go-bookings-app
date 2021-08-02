@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/baconYao/bookings-app/pkg/config"
-	"github.com/baconYao/bookings-app/pkg/models"
-	"github.com/baconYao/bookings-app/pkg/render"
+	"github.com/baconYao/bookings-app/internal/config"
+	"github.com/baconYao/bookings-app/internal/models"
+	"github.com/baconYao/bookings-app/internal/render"
 )
 
 // Repo the repository used by the handlers
