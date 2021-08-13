@@ -148,4 +148,30 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+
+	// 將 reservation 資料存於後端的 session 中
+	// ref: https://github.com/alexedwards/scs#basic-use
+	// r.Context(): ref: https://studygolang.com/articles/10155?fr=sidebar
+		// 在go服務器中，對於每個請求的request都是在單獨的goroutine中進行的，處理一個request也可
+		// 能設計多個goroutine之間的交互， 使用context可以使開發者方便的在這些goroutine里傳遞request相關的數據
+		// 、取消goroutine的signal或截止日期
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+
+	// Redirect to /reservation-summary route with 303 status code (http.StatusSeeOther)
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+}
+
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	// 從後端 session 取出 reservation 資訊
+	// .(models.Reservation): golang 的 type assertion，使取出的 reservation 是為 Reservation 結構
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("Cannot get item from session")
+		return
+	}
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+	render.RenderTemplate(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
