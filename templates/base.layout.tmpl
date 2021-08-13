@@ -153,6 +153,22 @@
             })
         }
 
+        // template 若有 Error 的訊息時
+        {{with .Error}}
+        // {{.}}: 無論收到什麼資料
+        notify("{{.}}", "error")
+        {{end}}
+
+        // template 若有 Flash 的訊息時
+        {{with .Flash}}
+        notify("{{.}}", "success")
+        {{end}}
+
+        // template 若有 Warning 的訊息時
+        {{with .Warning}}
+        notify("{{.}}", "warning")
+        {{end}}
+
         function Prompt() {
             let toast = function (c) {
                 const{
