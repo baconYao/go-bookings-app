@@ -57,7 +57,10 @@ func getRoutes() http.Handler {
 	mux := chi.NewRouter()
 
 	mux.Use(middleware.Recoverer)
-	mux.Use(NoSurf)
+
+	// 使用此 middleware 時，就需要產生 CSRF token，但在測試時，產生 CSRF token 的意義不大，所以在此忽略 CSRF token
+	// mux.Use(NoSurf)
+
 	mux.Use(SessionLoad)
 
 	mux.Get("/", Repo.Home)
