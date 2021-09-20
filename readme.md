@@ -15,4 +15,25 @@ I cloned and followed by the repository for [Building Modern Web Applications wi
 $ go run cmd/web/*.go
 ```
 
+## Start Test
+
+### Run tests
+```
+$ cd cmd/web
+$ go test -v
+```
+
+### Check coverage
+```
+$ cd cmd/web
+$ go test -cover
+$ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
+### Check coverage
+```
+$ cd cmd/web
+$ go test -coverprofile=coverage.out && go tool cover -html=coverage.out
+```
+
 After starting server, open the browser, hit the `127.0.0.1:8080` in URL

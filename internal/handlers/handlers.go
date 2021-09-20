@@ -55,7 +55,6 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-
 // Generals renders the room page
 func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
 	render.RenderTemplate(w, r, "generals.page.tmpl", &models.TemplateData{})
@@ -81,14 +80,14 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 }
 
 type jsonResponse struct {
-	OK 		bool 	`json:"ok"`
-	Message string 	`json:"message"`
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
 }
 
 // AvailabilityJSON handles request for availability and send JSON response
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	resp := jsonResponse{
-		OK: true,
+		OK:      true,
 		Message: "Available!",
 	}
 
@@ -97,7 +96,7 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
-	log.Println(string(out))
+	// log.Println(string(out))
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
 }
@@ -127,18 +126,18 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	reservation := models.Reservation{
-		FirstName: 	r.Form.Get("first_name"),
-		LastName: 	r.Form.Get("last_name"),
-		Phone: 		r.Form.Get("phone"),
-		Email: 		r.Form.Get("email"),
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Phone:     r.Form.Get("phone"),
+		Email:     r.Form.Get("email"),
 	}
 
 	form := forms.New(r.PostForm)
 	form.Required("first_name", "last_name", "email")
-	form.MinLength("first_name", 3, r)
+	form.MinLength("first_name", 3)
 	form.IsEmail("email")
 
-	if ! form.Valid() {
+	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
@@ -152,15 +151,16 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	// 將 reservation 資料存於後端的 session 中
 	// ref: https://github.com/alexedwards/scs#basic-use
 	// r.Context(): ref: https://studygolang.com/articles/10155?fr=sidebar
-		// 在go服務器中，對於每個請求的request都是在單獨的goroutine中進行的，處理一個request也可
-		// 能設計多個goroutine之間的交互， 使用context可以使開發者方便的在這些goroutine里傳遞request相關的數據
-		// 、取消goroutine的signal或截止日期
+	// 在go服務器中，對於每個請求的request都是在單獨的goroutine中進行的，處理一個request也可
+	// 能設計多個goroutine之間的交互， 使用context可以使開發者方便的在這些goroutine里傳遞request相關的數據
+	// 、取消goroutine的signal或截止日期
 	m.App.Session.Put(r.Context(), "reservation", reservation)
 
 	// Redirect to /reservation-summary route with 303 status code (http.StatusSeeOther)
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
+// ReservationSummary displays the res summary page
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	// 從後端 session 取出 reservation 資訊
 	// .(models.Reservation): golang 的 type assertion，使取出的 reservation 是為 Reservation 結構
