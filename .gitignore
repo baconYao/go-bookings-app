@@ -1,2 +1,5 @@
 .idea
 .DS_Store
+
+# Build binary
+bookings
