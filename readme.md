@@ -12,7 +12,7 @@ I cloned and followed by the repository for [Building Modern Web Applications wi
 
 ### Run the web server
 ```
-$ go run cmd/web/*.go
+$ source run.sh
 ```
 
 ## Start Test
@@ -21,6 +21,8 @@ $ go run cmd/web/*.go
 ```
 $ cd cmd/web
 $ go test -v
+
+$ go test -v ./...
 ```
 
 ### Check coverage
