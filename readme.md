@@ -66,11 +66,14 @@ If you don't have migrations folder, follow the steps list bellow
 1. [Set the database.yml conf in your root folder](https://gobuffalo.io/en/docs/db/configuration/)
 1. [fizz-migrations](https://gobuffalo.io/en/docs/db/migrations/#fizz-migrations)
     ```bash
+    # Create tables
     $ soda generate fizz CreateUserTable
     $ soda generate fizz CreateReservationTable
     $ soda generate fizz CreateRoomsTable
     $ soda generate fizz CreateRestrictionsTable
     $ soda generate fizz CreateRoomRestrictionsTable
+    # Create foreign key
+    $ soda generate fizz CreateFKForReservationsTable
     ```
 1. [Put setting into the create_create_user_tables.up.fizz file which is in migrations folder](https://gobuffalo.io/en/docs/db/fizz#create-a-table)
 
