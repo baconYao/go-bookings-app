@@ -3,3 +3,6 @@
 
 # Build binary
 bookings
+
+# DB
+database.yml
