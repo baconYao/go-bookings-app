@@ -15,6 +15,7 @@ import (
 	"github.com/baconYao/bookings-app/internal/render"
 	"github.com/baconYao/bookings-app/internal/repository"
 	"github.com/baconYao/bookings-app/internal/repository/dbrepo"
+	"github.com/go-chi/chi"
 )
 
 // Repo the repository used by the handlers
@@ -258,4 +259,24 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	render.Template(w, r, "reservation-summary.page.tmpl", &models.TemplateData{
 		Data: data,
 	})
+}
+
+// ChooseRoom
+func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+	// 從 URL 取得 id 的資訊
+	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		helpers.ServerError(w, err)
+		return
+	}
+	// 更新 session 內的 RoomID
+	reservation.RoomID = roomID
+	m.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
