@@ -84,6 +84,8 @@ If you don't have migrations folder, follow the steps list bellow
 
     # Migration for seeding rooms
     $ soda generate sql SeedRoomsTable
+    # Migration for seeding restrictions
+    $ soda generate sql SeedRestrictionsTable
     ```
 1. [Put setting into the create_create_user_tables.up.fizz file which is in migrations folder](https://gobuffalo.io/en/docs/db/fizz#create-a-table)
 
