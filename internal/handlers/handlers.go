@@ -257,7 +257,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
 }
 
-// ReservationSummary displays the res summary page
+// ReservationSummary displays the reservation summary page
 func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	// 從後端 session 取出 reservation 資訊
 	// .(models.Reservation): golang 的 type assertion，使取出的 reservation 是為 Reservation 結構
@@ -287,7 +287,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
-// ChooseRoom
+// ChooseRoom displays list of available rooms
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	// 從 URL 取得 id 的資訊
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
@@ -304,5 +304,39 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	// 更新 session 內的 RoomID
 	reservation.RoomID = roomID
 	m.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
+}
+
+// BookRoom takse URL parameters, builds a session variable, and takse user to make res screen
+func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
+	roomID, _ := strconv.Atoi(r.URL.Query().Get("id"))
+	sd := r.URL.Query().Get("s")
+	ed := r.URL.Query().Get("e")
+
+	layout := "2006-01-02"
+	startDate, err := time.Parse(layout, sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	endDate, err := time.Parse(layout, ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	var res models.Reservation
+
+	room, err := m.DB.GetRoomByID(roomID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.Room.RoomName = room.RoomName
+	res.RoomID = roomID
+	res.StartDate = startDate
+	res.EndDate = endDate
+
+	m.App.Session.Put(r.Context(), "reservation", res)
+
 	http.Redirect(w, r, "/make-reservation", http.StatusSeeOther)
 }
