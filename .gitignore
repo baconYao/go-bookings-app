@@ -6,3 +6,6 @@ bookings
 
 # DB
 database.yml
+
+# Go testing coverage
+coverage.out
