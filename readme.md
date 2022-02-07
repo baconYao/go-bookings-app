@@ -10,6 +10,7 @@ I cloned and followed by the repository for [Building Modern Web Applications wi
 - Uses [go-simple-mail](github.com/xhit/go-simple-mail)
     - [MailHog](https://github.com/mailhog/MailHog) - For testing at localhost
         - `brew services start mailhog`
+    - [Foundation](https://get.foundation/emails.html) - Email templates
 
 ## Start the Web Server
 
