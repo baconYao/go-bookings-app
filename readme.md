@@ -9,6 +9,7 @@ I cloned and followed by the repository for [Building Modern Web Applications wi
 - Uses [nosurf](github.com/justinas/nosurf)
 - Uses [go-simple-mail](github.com/xhit/go-simple-mail)
     - [MailHog](https://github.com/mailhog/MailHog) - For testing at localhost
+        - `brew services start mailhog`
 
 ## Start the Web Server
 
