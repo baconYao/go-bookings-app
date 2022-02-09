@@ -34,6 +34,7 @@ func routes(app *config.AppConfig) http.Handler {
 	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
 
 	mux.Get("/user/login", handlers.Repo.ShowLogin)
+	mux.Post("/user/login", handlers.Repo.PostShowLogin)
 
 	// 處理靜態檔案，例如 images, videos 等等
 	fileServer := http.FileServer(http.Dir("./static/"))
