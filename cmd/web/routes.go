@@ -52,6 +52,7 @@ func routes(app *config.AppConfig) http.Handler {
 
 		// src -> all 或是 new
 		mux.Get("/reservations/{src}/{id}", handlers.Repo.AdminShowReservation)
+		mux.Post("/reservations/{src}/{id}", handlers.Repo.AdminPostShowReservation)
 
 	})
 
