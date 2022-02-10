@@ -43,12 +43,16 @@ func routes(app *config.AppConfig) http.Handler {
 
 	// /admin 的 url 路徑都會被 Auth middleware 保護
 	mux.Route("/admin", func(mux chi.Router) {
-		mux.Use(Auth)
+		// mux.Use(Auth)
 
 		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
 		mux.Get("/reservations-new", handlers.Repo.AdminNewReservations)
 		mux.Get("/reservations-all", handlers.Repo.AdminAllReservations)
 		mux.Get("/reservations-calendar", handlers.Repo.AdminReservationsCalendar)
+
+		// src -> all 或是 new
+		mux.Get("/reservations/{src}/{id}", handlers.Repo.AdminShowReservation)
+
 	})
 
 	return mux
