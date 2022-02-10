@@ -12,6 +12,7 @@ I cloned and followed by the repository for [Building Modern Web Applications wi
         - `brew services start mailhog`
     - [Foundation](https://get.foundation/emails.html) - Email templates
 - Uses [RoyalUI-Free-Bootstrap-Admin-Template](https://github.com/BootstrapDash/RoyalUI-Free-Bootstrap-Admin-Template) - Admin dashboard template
+- Uses [Simple-DataTables](https://github.com/fiduswriter/Simple-DataTables) - To display table content
 
 ## Start the Web Server
 
