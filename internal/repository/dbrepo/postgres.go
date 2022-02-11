@@ -463,7 +463,53 @@ func (m *postgresDBRepo) AllRooms() ([]models.Room, error) {
 	}
 
 	if err = rows.Err(); err != nil {
-		return rooms, err
+		return nil, err
 	}
 	return rooms, nil
+}
+
+// GetRestrictionsForRoomByDate returns restrictions for a room by date range
+func (m *postgresDBRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var restrictions []models.RoomRestriction
+
+	/*
+		由於在 room_restrictions，有些 record 的 reservation_id 是 NULL (因為不是客人訂的，
+		是房東自己 block 的日期)，因此使用 coalesce 方法，當 reservation_id 是 NULL 時，轉換成 0
+	*/
+	query := `
+		select
+			id, coalesce(reservation_id, 0), restriction_id, room_id, start_date, end_date
+		from
+			room_restrictions where $1 < end_date and $2 >= start_date and room_id = $3
+	`
+
+	rows, err := m.DB.QueryContext(ctx, query, start, end, roomID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var r models.RoomRestriction
+		err := rows.Scan(
+			&r.ID,
+			&r.ReservationID,
+			&r.RestrictionID,
+			&r.RoomID,
+			&r.StartDate,
+			&r.EndDate,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		restrictions = append(restrictions, r)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	return restrictions, nil
 }
