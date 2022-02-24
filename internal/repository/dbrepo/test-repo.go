@@ -30,6 +30,9 @@ func (m *testDBRepo) InsertRoomRestrictions(r models.RoomRestriction) error {
 
 // SearchAvailabilityByDatesByRoomID returns true if availability exists for roomID, and false if no availability exists
 func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+	if start.Format("2006-01-01") == "2040-01-01" && end.Format("2006-01-02") == "2040-01-02" {
+		return true, nil
+	}
 	return false, nil
 }
 
@@ -56,7 +59,10 @@ func (m *testDBRepo) UpdateUser(u models.User) error {
 	return nil
 }
 func (m *testDBRepo) Authenticate(email, testPassword string) (int, string, error) {
-	return 1, "", nil
+	if email == "me@here.ca" {
+		return 1, "", nil
+	}
+	return 0, "", errors.New("some error")
 }
 
 func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
