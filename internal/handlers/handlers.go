@@ -224,6 +224,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 }
 
 // PostReservation handles the posting of a reservation form
+// See: https://github.com/tsawler/bookings/blob/main/internal/handlers/handlers.go#L101
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
@@ -253,7 +254,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 		// // StatusUnprocessableEntity --> 422
-		http.Error(w, "Invalid formdata", http.StatusUnprocessableEntity)
+		// http.Error(w, "Invalid formdata", http.StatusUnprocessableEntity)
 		render.Template(w, r, "make-reservation.page.tmpl", &models.TemplateData{
 			Form: form,
 			Data: data,
